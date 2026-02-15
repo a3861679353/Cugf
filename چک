@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>آراد کرمان · سیستم هوشمند مشتریان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tahoma&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'Sahel';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/Sahel.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Shabnam';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/Shabnam.woff2') format('woff2');
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .app {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header {
+            padding: 50px 25px 40px;
+            color: white;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: shine 8s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-30%) translateY(-30%) rotate(0deg); }
+            50% { transform: translateX(30%) translateY(30%) rotate(10deg); }
+            100% { transform: translateX(-30%) translateY(-30%) rotate(0deg); }
+        }
+        
+        .content {
+            padding: 25px;
+            max-height: 550px;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        
+        .content::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 25px;
+            font-weight: 900;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .btn:active {
+            transform: scale(0.97);
+        }
+        
+        .btn-primary { background: linear-gradient(145deg, #2563eb, #1e40af); }
+        .btn-success { background: linear-gradient(145deg, #16a34a, #15803d); }
+        .btn-danger { background: linear-gradient(145deg, #dc2626, #b91c1c); }
+        .btn-warning { background: linear-gradient(145deg, #f59e0b, #d97706); }
+        .btn-info { background: linear-gradient(145deg, #06b6d4, #0891b2); }
+        
+        .inp {
+            width: 100%;
+            padding: 16px;
+            border-radius: 25px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .inp:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .pin-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .pin-dot {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 3px solid #fbbf24;
+            transition: all 0.2s;
+        }
+        
+        .pin-dot.filled {
+            background: #fbbf24;
+        }
+        
+        .color-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+        }
+        
+        .color-box:hover {
+            transform: scale(1.1);
+            border-color: #2563eb;
+        }
+        
+        .nav-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            border-radius: 25px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #2563eb;
+            background: #eff6ff;
+        }
+        
+        .nav-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 900;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .badge {
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 900;
+            display: inline-block;
+        }
+        
+        .badge-vip {
+            background: linear-gradient(145deg, #fbbf24, #f59e0b);
+            color: black;
+        }
+        
+        .badge-lost {
+            background: linear-gradient(145deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .badge-normal {
+            background: linear-gradient(145deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .customer-code {
+            background: #f1f5f9;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: 900;
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px dashed #2563eb;
+            margin-bottom: 20px;
+        }
+        
+        #qrcode {
+            background: white;
+            padding: 10px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- مودال PIN -->
+    <div id="pinModal" class="modal">
+        <div class="modal-content text-center">
+            <i class="fa-solid fa-lock text-5xl text-amber-400 mb-4"></i>
+            <h2 class="text-2xl font-black mb-6">رمز ورود</h2>
+            <div class="pin-container">
+                <span id="pin1" class="pin-dot"></span>
+                <span id="pin2" class="pin-dot"></span>
+                <span id="pin3" class="pin-dot"></span>
+                <span id="pin4" class="pin-dot"></span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mt-6">
+                <button onclick="pinInput('1')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">1</button>
+                <button onclick="pinInput('2')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">2</button>
+                <button onclick="pinInput('3')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">3</button>
+                <button onclick="pinInput('4')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">4</button>
+                <button onclick="pinInput('5')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">5</button>
+                <button onclick="pinInput('6')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">6</button>
+                <button onclick="pinInput('7')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">7</button>
+                <button onclick="pinInput('8')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">8</button>
+                <button onclick="pinInput('9')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">9</button>
+                <button onclick="pinInput('C')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">C</button>
+                <button onclick="pinInput('0')" class="bg-slate-100 p-5 rounded-2xl text-2xl font-bold">0</button>
+                <button onclick="pinSubmit()" class="bg-green-500 text-white p-5 rounded-2xl text-2xl font-bold">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال قوانین -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-black text-center mb-4">📜 قوانین</h2>
+            <div class="bg-slate-50 p-5 rounded-2xl text-sm leading-7 mb-6">
+                <p>📍 تمام اطلاعات در گوشی شما ذخیره می‌شود</p>
+                <p>🔐 لایسنس غیرقابل انتقال است</p>
+                <p>🤝 خرید اشتراک: @Amirmohmap</p>
+                <p>🎁 نسخه رایگان: ۲۰ مشتری</p>
+            </div>
+            <button onclick="acceptTerms()" class="btn btn-primary">تایید و ورود</button>
+        </div>
+    </div>
+
+    <!-- مودال پنل مشتری -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-black">👤 پنل مشتری</h2>
+                <button onclick="closeCustomerModal()" class="text-2xl">✕</button>
+            </div>
+            <div id="customerModalContent"></div>
+        </div>
+    </div>
+
+    <!-- مودال پشتیبان‌گیری -->
+    <div id="backupModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-black">💾 پشتیبان‌گیری</h2>
+                <button onclick="closeBackupModal()" class="text-2xl">✕</button>
+            </div>
+            
+            <div class="bg-red-50 p-5 rounded-2xl mb-4">
+                <p class="text-sm text-red-700 leading-6">
+                    <b>⚠️ هشدار مهم:</b><br>
+                    اطلاعات شما در مرورگر ذخیره میشه. اگه مرورگر پاک بشه، همه چیز می‌ره!
+                </p>
+            </div>
+
+            <button onclick="backupData()" class="btn btn-success mb-3">
+                <i class="fa-solid fa-download"></i> دانلود پشتیبان
+            </button>
+
+            <div class="relative">
+                <input type="file" id="restoreFile" accept=".json" class="hidden" onchange="restoreData(event)">
+                <button onclick="document.getElementById('restoreFile').click()" class="btn btn-primary">
+                    <i class="fa-solid fa-upload"></i> بازیابی اطلاعات
+                </button>
+            </div>
+
+            <p class="text-xs text-center text-slate-400 mt-4">
+                فایل پشتیبان رو جاهای امن نگه دار
+            </p>
+        </div>
+    </div>
+
+    <!-- اپلیکیشن اصلی -->
+    <div id="mainApp" class="app hidden">
+        <!-- هدر -->
+        <div class="header" id="header">
+            <div class="flex justify-between items-center">
+                <div onclick="adminTrigger()" class="cursor-pointer">
+                    <h1 id="shopName" class="text-2xl font-black">آراد کرمان</h1>
+                    <p id="userName" class="text-xs opacity-80">مدیریت فروشگاه</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="openBackupModal()" class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-database"></i>
+                    </button>
+                    <button onclick="showPage('settings')" class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- بنر تولد -->
+            <div id="birthdayBanner" class="hidden mt-4 bg-pink-500/30 p-4 rounded-2xl flex justify-between items-center">
+                <span id="birthdayText" class="text-sm font-black"></span>
+                <button onclick="sendBirthdaySms()" class="bg-white text-black text-xs px-4 py-2 rounded-xl font-black">🎂 تبریک</button>
+            </div>
+        </div>
+
+        <!-- محتوای اصلی -->
+        <div class="content" id="content">
+            <!-- صفحه خانه -->
+            <div id="page-home" class="page">
+                <!-- کارت آمار -->
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="card text-center py-4">
+                        <i class="fa-solid fa-users text-blue-600 text-2xl"></i>
+                        <p id="totalCustomers" class="text-2xl font-black">0</p>
+                        <p class="text-[10px] font-black">کل مشتریان</p>
+                    </div>
+                    <div class="card text-center py-4">
+                        <i class="fa-solid fa-crown text-amber-500 text-2xl"></i>
+                        <p id="totalVip" class="text-2xl font-black">0</p>
+                        <p class="text-[10px] font-black">VIP</p>
+                    </div>
+                    <div class="card text-center py-4">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl"></i>
+                        <p id="totalLost" class="text-2xl font-black">0</p>
+                        <p class="text-[10px] font-black">گمشده</p>
+                    </div>
+                </div>
+
+                <!-- دکمه‌های اصلی -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div onclick="showPage('add')" class="card text-center py-6">
+                        <i class="fa-solid fa-user-plus text-3xl text-blue-600"></i>
+                        <p class="text-sm font-black mt-2">➕ مشتری جدید</p>
+                    </div>
+                    <div onclick="showPage('list')" class="card text-center py-6">
+                        <i class="fa-solid fa-address-book text-3xl text-slate-900"></i>
+                        <p id="customerCount" class="text-sm font-black mt-2">لیست (0)</p>
+                    </div>
+                </div>
+
+                <!-- دسترسی سریع -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div onclick="showPage('vip-list')" class="card bg-amber-50 text-center py-4">
+                        <i class="fa-solid fa-crown text-amber-600 text-2xl"></i>
+                        <p class="text-xs font-black mt-1">VIP‌ها</p>
+                    </div>
+                    <div onclick="showPage('lost-list')" class="card bg-red-50 text-center py-4">
+                        <i class="fa-solid fa-triangle-exclamation text-red-600 text-2xl"></i>
+                        <p class="text-xs font-black mt-1">گمشده‌ها</p>
+                    </div>
+                </div>
+
+                <!-- سیستم پیامک خودکار -->
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-5 rounded-3xl text-white mb-4">
+                    <p class="font-black text-lg mb-3">🤖 پیامک خودکار</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="autoBirthdaySms()" class="bg-white/20 py-3 rounded-2xl text-sm font-black">🎂 تولد</button>
+                        <button onclick="autoLotterySms()" class="bg-white/20 py-3 rounded-2xl text-sm font-black">🎰 قرعه‌کشی</button>
+                    </div>
+                </div>
+
+                <!-- کارت‌های ویژه -->
+                <div onclick="vipGuard('lottery')" class="card bg-gradient-to-r from-orange-500 to-amber-500 text-white flex justify-between items-center py-6">
+                    <div><p class="font-black text-xl">🎰 قرعه‌کشی</p><p class="text-xs opacity-80">شانس بر اساس امتیاز</p></div>
+                    <i class="fa-solid fa-ticket-simple text-4xl"></i>
+                </div>
+
+                <div onclick="vipGuard('discounts')" class="card bg-gradient-to-r from-green-600 to-emerald-600 text-white flex justify-between items-center py-4">
+                    <div><p class="font-black text-lg">🏷️ کدهای تخفیف</p></div>
+                    <i class="fa-solid fa-tag text-3xl"></i>
+                </div>
+
+                <div onclick="showPage('qr')" class="card bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex justify-between items-center py-4">
+                    <div><p class="font-black text-lg">📱 عضویت با QR</p></div>
+                    <i class="fa-solid fa-qrcode text-3xl"></i>
+                </div>
+
+                <div onclick="showPage('vip')" class="card bg-gradient-to-r from-slate-800 to-slate-900 text-white flex justify-between items-center py-4">
+                    <div><p id="vipStatus" class="font-black text-lg text-amber-400">💎 خرید اشتراک</p></div>
+                    <i class="fa-solid fa-crown text-3xl text-amber-500"></i>
+                </div>
+            </div>
+
+            <!-- صفحه افزودن مشتری -->
+            <div id="page-add" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">➕ مشتری جدید</h2>
+                </div>
+                <input id="addName" class="inp" placeholder="نام و نام خانوادگی">
+                <input id="addPhone" class="inp" placeholder="شماره موبایل">
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <select id="addDay" class="inp"></select>
+                    <select id="addMonth" class="inp"></select>
+                    <select id="addYear" class="inp"></select>
+                </div>
+                <button onclick="addCustomer()" class="btn btn-primary">ثبت مشتری</button>
+            </div>
+
+            <!-- صفحه لیست مشتریان -->
+            <div id="page-list" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">👥 لیست مشتریان</h2>
+                </div>
+                <input id="search" class="inp" placeholder="جستجو با نام، شماره یا کد..." onkeyup="renderList()">
+                <div id="listContainer" class="space-y-3"></div>
+            </div>
+
+            <!-- صفحه پنل مشتری -->
+            <div id="page-customer" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('list')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">👤 پنل مشتری</h2>
+                </div>
+                <div id="customerInfo" class="card bg-blue-50"></div>
+                
+                <div class="card bg-amber-50">
+                    <p class="font-black text-lg mb-2">⭐ افزودن امتیاز</p>
+                    <div class="flex gap-2">
+                        <input id="pointValue" type="number" class="inp !mb-0" placeholder="تعداد" value="1">
+                        <button onclick="addPoints()" class="btn !bg-amber-500 !py-3 w-24">ثبت</button>
+                    </div>
+                </div>
+
+                <div class="card bg-green-50">
+                    <p class="font-black text-lg mb-2">💰 ثبت خرید</p>
+                    <div class="flex gap-2">
+                        <input id="purchaseAmount" type="number" class="inp !mb-0" placeholder="مبلغ (تومان)">
+                        <button onclick="addPurchase()" class="btn !bg-green-600 !py-3 w-24">ثبت</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- صفحه VIP‌ها -->
+            <div id="page-vip-list" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">👑 مشتریان VIP</h2>
+                </div>
+                <div id="vipList" class="space-y-3"></div>
+                <button onclick="sendVipSms()" class="btn btn-warning mt-4">📨 پیامک به همه VIP‌ها</button>
+            </div>
+
+            <!-- صفحه گمشده‌ها -->
+            <div id="page-lost-list" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">⚠️ مشتریان گمشده</h2>
+                </div>
+                <div id="lostList" class="space-y-3"></div>
+                <button onclick="sendLostSms()" class="btn btn-danger mt-4">📨 پیامک بازگشت</button>
+            </div>
+
+            <!-- صفحه قرعه‌کشی -->
+            <div id="page-lottery" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">🎰 قرعه‌کشی</h2>
+                </div>
+                
+                <div class="card">
+                    <p class="font-black text-lg mb-2">جوایز را وارد کنید</p>
+                    <textarea id="prizes" class="inp h-32" placeholder="ساعت هوشمند&#10;کد تخفیف ۵۰٪&#10;پول نقد"></textarea>
+                    <button onclick="runLottery()" class="btn btn-warning">شروع قرعه‌کشی</button>
+                </div>
+
+                <div id="lotteryResult" class="space-y-2 mt-4"></div>
+
+                <div class="card mt-4">
+                    <p class="font-black text-lg mb-2">🔍 چک کد</p>
+                    <input id="checkCode" class="inp" placeholder="کد جایزه یا تخفیف">
+                    <button onclick="checkCode()" class="btn btn-primary">بررسی</button>
+                    <div id="checkResult" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- صفحه کدهای تخفیف -->
+            <div id="page-discounts" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">🏷️ کدهای تخفیف</h2>
+                </div>
+                
+                <div class="card">
+                    <p class="font-black text-lg mb-2">ساخت کد جدید</p>
+                    <input id="discountTitle" class="inp" placeholder="عنوان تخفیف">
+                    <input id="discountPercent" type="number" class="inp" placeholder="درصد تخفیف">
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                        <input id="discountDay" type="number" class="inp" placeholder="روز" value="30">
+                        <input id="discountMonth" type="number" class="inp" placeholder="ماه" value="0">
+                    </div>
+                    <button onclick="createDiscount()" class="btn btn-success">ساخت کد تخفیف</button>
+                </div>
+
+                <div id="discountList" class="space-y-2 mt-4"></div>
+            </div>
+
+            <!-- صفحه QR Code -->
+            <div id="page-qr" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">📱 عضویت با QR</h2>
+                </div>
+
+                <div class="qr-container">
+                    <div id="qrcode"></div>
+                    <p class="text-sm font-black mt-3">اسکن کنید برای ثبت‌نام</p>
+                </div>
+
+                <div class="card">
+                    <p class="font-black text-lg mb-2">🧪 شبیه‌سازی ثبت‌نام</p>
+                    <input id="qrName" class="inp" placeholder="نام مشتری" value="علی مرادی">
+                    <input id="qrPhone" class="inp" placeholder="شماره موبایل" value="09123456789">
+                    <div class="grid grid-cols-3 gap-2 mb-3">
+                        <select id="qrDay" class="inp"></select>
+                        <select id="qrMonth" class="inp"></select>
+                        <select id="qrYear" class="inp"></select>
+                    </div>
+                    <button onclick="qrRegister()" class="btn btn-primary">ثبت‌نام آزمایشی</button>
+                </div>
+            </div>
+
+            <!-- صفحه خرید اشتراک -->
+            <div id="page-vip" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">💎 اشتراک ویژه</h2>
+                </div>
+
+                <div class="card text-center">
+                    <p class="text-xs">شناسه دستگاه شما</p>
+                    <p id="deviceId" class="text-3xl font-black tracking-widest my-3">------</p>
+                    <button onclick="copyDeviceId()" class="text-blue-600 text-sm mb-4">کپی</button>
+                    <p class="text-sm">خرید اشتراک از تلگرام:</p>
+                    <a href="https://t.me/Amirmohmap" class="text-2xl font-black text-blue-600">@Amirmohmap</a>
+                </div>
+
+                <input id="licenseKey" class="inp mt-4" placeholder="کد لایسنس">
+                <button onclick="activateLicense()" class="btn btn-success">فعال‌سازی</button>
+            </div>
+
+            <!-- صفحه تنظیمات -->
+            <div id="page-settings" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-xl font-black">⚙️ تنظیمات</h2>
+                </div>
+
+                <div class="card">
+                    <p class="font-black text-lg mb-3">🏪 اطلاعات فروشگاه</p>
+                    <input id="setShopName" class="inp" placeholder="نام فروشگاه">
+                    <input id="setUserName" class="inp" placeholder="نام مدیر">
+                </div>
+
+                <div class="card">
+                    <p class="font-black text-lg mb-3">🎨 رنگ هدر</p>
+                    <div class="flex justify-between">
+                        <div onclick="changeColor('#2563eb')" class="color-box" style="background: #2563eb;"></div>
+                        <div onclick="changeColor('#dc2626')" class="color-box" style="background: #dc2626;"></div>
+                        <div onclick="changeColor('#16a34a')" class="color-box" style="background: #16a34a;"></div>
+                        <div onclick="changeColor('#9333ea')" class="color-box" style="background: #9333ea;"></div>
+                        <div onclick="changeColor('#1e293b')" class="color-box" style="background: #1e293b;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p class="font-black text-lg mb-3">🔤 فونت برنامه</p>
+                    <select id="fontSelect" class="inp" onchange="changeFont(this.value)">
+                        <option value="Vazirmatn">وزیرمتن</option>
+                        <option value="Tahoma">تاهوما</option>
+                        <option value="Sahel">ساحل</option>
+                        <option value="Shabnam">شبنم</option>
+                    </select>
+                </div>
+
+                <div class="card">
+                    <p class="font-black text-lg mb-3">🔐 رمز ورود (PIN)</p>
+                    <input id="setPin" type="password" maxlength="4" class="inp" placeholder="۴ رقم">
+                </div>
+
+                <button onclick="saveSettings()" class="btn btn-success">
+                    <i class="fa-regular fa-floppy-disk"></i> ذخیره تنظیمات
+                </button>
+            </div>
+
+            <!-- صفحه پنل مدیریت (مخفی) -->
+            <div id="page-admin" class="page hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="showPage('home')" class="text-2xl">✕</button>
+                    <h2 class="text-2xl font-black text-amber-400">🛡️ پنل مدیریت</h2>
+                </div>
+                
+                <div class="card bg-slate-900 text-white">
+                    <p class="font-black text-lg mb-4 text-amber-400">🔑 ساخت کد اشتراک</p>
+                    <input id="adminDeviceId" class="inp !bg-slate-800 text-white" placeholder="شناسه دستگاه">
+                    <select id="adminDuration" class="inp !bg-slate-800 text-white">
+                        <option value="90">۹۰ روز</option>
+                        <option value="180">۱۸۰ روز</option>
+                        <option value="365">۳۶۵ روز</option>
+                    </select>
+                    <button onclick="adminCreateLicense()" class="btn btn-warning">ساخت لایسنس</button>
+                    <div id="adminLicenseResult" class="mt-4 p-4 bg-white text-black rounded-2xl text-center font-black hidden"></div>
+                </div>
+
+                <div class="card bg-slate-900 text-white mt-4">
+                    <p class="font-black text-lg mb-4 text-amber-400">🏷️ ساخت کد تخفیف</p>
+                    <input id="adminDiscountTitle" class="inp !bg-slate-800 text-white" placeholder="عنوان تخفیف">
+                    <input id="adminDiscountPercent" type="number" class="inp !bg-slate-800 text-white" placeholder="درصد">
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                        <input id="adminDiscountDay" type="number" class="inp !bg-slate-800 text-white" placeholder="روز" value="30">
+                        <input id="adminDiscountMonth" type="number" class="inp !bg-slate-800 text-white" placeholder="ماه" value="0">
+                    </div>
+                    <button onclick="adminCreateDiscount()" class="btn btn-success">ساخت کد تخفیف</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- نویگیشن پایین -->
+        <div class="nav-bar">
+            <div class="nav-item active" onclick="showPage('home')">
+                <i class="fa-solid fa-home"></i>
+                <span>خانه</span>
+            </div>
+            <div class="nav-item" onclick="showPage('add')">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span>افزودن</span>
+            </div>
+            <div class="nav-item" onclick="showPage('list')">
+                <i class="fa-solid fa-list"></i>
+                <span>لیست</span>
+            </div>
+            <div class="nav-item" onclick="showPage('qr')">
+                <i class="fa-solid fa-qrcode"></i>
+                <span>QR</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== رمز مخفی مدیریت ==========
+        const ADMIN_SECRET = '3800885344';
+        
+        // ========== دیتابیس ==========
+        let db = JSON.parse(localStorage.getItem('arad_crm_final')) || {
+            terms: false,
+            users: [],
+            winners: [],
+            discounts: [],
+            vipExp: 0,
+            deviceId: Math.random().toString(36).substring(2, 10).toUpperCase(),
+            pin: '',
+            shopName: 'آراد کرمان',
+            userName: 'مدیر فروشگاه',
+            usedLicenses: [],
+            lastCode: 1000,
+            totalPoints: 0,
+            headerColor: '#2563eb',
+            font: 'Vazirmatn'
+        };
+
+        const save = () => localStorage.setItem('arad_crm_final', JSON.stringify(db));
+
+        // ========== متغیرها ==========
+        let pinEntered = '';
+        let currentCustomerId = null;
+        let adminClickCount = 0;
+
+        // ========== مقداردهی اولیه ==========
+        function init() {
+            document.body.style.fontFamily = db.font + ', sans-serif';
+            document.getElementById('header').style.background = db.headerColor;
+            
+            populateDates('add');
+            populateDates('qr');
+            
+            document.getElementById('setShopName').value = db.shopName;
+            document.getElementById('setUserName').value = db.userName;
+            document.getElementById('setPin').value = db.pin;
+            document.getElementById('fontSelect').value = db.font;
+
+            if (!db.terms) {
+                document.getElementById('termsModal').style.display = 'flex';
+                return;
+            }
+
+            if (db.pin) {
+                document.getElementById('pinModal').style.display = 'flex';
+                return;
+            }
+
+            document.getElementById('mainApp').style.display = 'block';
+            updateUI();
+            showPage('home');
+            checkBirthdays();
+            initQR();
+        }
+
+        function populateDates(page) {
+            const day = document.getElementById(page + 'Day');
+            const month = document.getElementById(page + 'Month');
+            const year = document.getElementById(page + 'Year');
+            
+            if (day && day.children.length === 0) {
+                for (let i = 1; i <= 31; i++) day.innerHTML += `<option value="${i}">${i}</option>`;
+                for (let i = 1; i <= 12; i++) month.innerHTML += `<option value="${i}">ماه ${i}</option>`;
+                for (let i = 1405; i >= 1350; i--) year.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+        }
+
+        function pinInput(d) {
+            if (d === 'C') pinEntered = '';
+            else if (pinEntered.length < 4) pinEntered += d;
+            
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById('pin' + i);
+                if (dot) {
+                    if (i <= pinEntered.length) dot.classList.add('filled');
+                    else dot.classList.remove('filled');
+                }
+            }
+        }
+
+        function pinSubmit() {
+            if (pinEntered === db.pin) {
+                document.getElementById('pinModal').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                updateUI();
+                showPage('home');
+            } else {
+                alert('❌ رمز اشتباه است');
+                pinEntered = '';
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById('pin' + i).classList.remove('filled');
+                }
+            }
+        }
+
+        function acceptTerms() {
+            db.terms = true;
+            save();
+            document.getElementById('termsModal').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            updateUI();
+            showPage('home');
+            checkBirthdays();
+            initQR();
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page-' + page).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const pages = ['home', 'add', 'list', 'qr'];
+            const index = pages.indexOf(page);
+            if (index !== -1) {
+                document.querySelectorAll('.nav-item')[index].classList.add('active');
+            }
+
+            if (page === 'list') renderList();
+            if (page === 'vip-list') renderVipList();
+            if (page === 'lost-list') renderLostList();
+            if (page === 'discounts') renderDiscounts();
+            if (page === 'vip') document.getElementById('deviceId').innerText = db.deviceId;
+            if (page === 'qr') initQR();
+        }
+
+        function addCustomer() {
+            const name = document.getElementById('addName').value;
+            const phone = document.getElementById('addPhone').value;
+            
+            if (!name || !phone) {
+                alert('❌ نام و شماره را وارد کنید');
+                return;
+            }
+
+            if (db.vipExp < Date.now() && db.users.length >= 20) {
+                alert('❌ در نسخه رایگان فقط ۲۰ مشتری می‌توانید ثبت کنید');
+                return;
+            }
+
+            const code = (db.lastCode++).toString();
+            db.users.push({
+                id: Date.now(),
+                code: code,
+                name: name,
+                phone: phone,
+                d: document.getElementById('addDay').value,
+                m: document.getElementById('addMonth').value,
+                y: document.getElementById('addYear').value,
+                points: 5,
+                purchases: 0,
+                totalPurchase: 0,
+                lastPurchase: null,
+                discountCodes: []
+            });
+
+            save();
+
+            const link = window.location.href.split('?')[0] + '?customer=' + code;
+            const msg = `${name} عزیز، به ${db.shopName} خوش آمدید!\nامتیاز شما: 5\nلینک پنل شما: ${link}`;
+            window.location.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
+
+            alert('✅ مشتری ثبت شد - کد: ' + code);
+            document.getElementById('addName').value = '';
+            document.getElementById('addPhone').value = '';
+            updateUI();
+            showPage('home');
+        }
+
+        function renderList() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const list = db.users.filter(u => 
+                u.name.toLowerCase().includes(search) || 
+                u.phone.includes(search) || 
+                u.code.includes(search)
+            );
+
+            const container = document.getElementById('listContainer');
+            if (list.length === 0) {
+                container.innerHTML = '<div class="card text-center text-slate-400">مشتری یافت نشد</div>';
+                return;
+            }
+
+            const now = Date.now();
+            container.innerHTML = list.map(u => {
+                let badge = '<span class="badge badge-normal">معمولی</span>';
+                if (u.points >= 100) badge = '<span class="badge badge-vip">VIP ⭐</span>';
+                else if (u.lastPurchase && (now - u.lastPurchase) > 45 * 24 * 60 * 60 * 1000) {
+                    badge = '<span class="badge badge-lost">گمشده 🔴</span>';
+                }
+
+                return `
+                <div class="card">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="customer-code">${u.code}</span>
+                                ${badge}
+                            </div>
+                            <p class="font-black text-lg">${u.name}</p>
+                            <p class="text-sm text-slate-400">${u.phone}</p>
+                            <p class="text-sm mt-2">⭐ امتیاز: ${u.points}</p>
+                        </div>
+                        <button onclick="openCustomerPanel(${u.id})" class="bg-blue-100 text-blue-600 w-12 h-12 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-pen-to-square text-xl"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function openCustomerPanel(id) {
+            currentCustomerId = id;
+            const user = db.users.find(u => u.id === id);
+            if (!user) return;
+
+            document.getElementById('customerInfo').innerHTML = `
+                <p class="font-black text-xl">${user.name}</p>
+                <p class="text-sm">کد: ${user.code}</p>
+                <p class="text-sm">موبایل: ${user.phone}</p>
+                <p class="text-lg font-black mt-3">⭐ امتیاز: ${user.points}</p>
+                <p class="text-sm">🛒 خریدها: ${user.purchases}</p>
+            `;
+
+            showPage('customer');
+        }
+
+        function addPoints() {
+            if (!currentCustomerId) return;
+            const points = parseInt(document.getElementById('pointValue').value);
+            if (points <= 0) return;
+
+            const user = db.users.find(u => u.id === currentCustomerId);
+            if (user) {
+                user.points += points;
+                db.totalPoints += points;
+                save();
+                alert(`✅ ${points} امتیاز اضافه شد`);
+                openCustomerPanel(currentCustomerId);
+            }
+        }
+
+        function addPurchase() {
+            if (!currentCustomerId) return;
+            const amount = parseInt(document.getElementById('purchaseAmount').value);
+            if (!amount) return;
+
+            const points = Math.floor(amount / 1000);
+            const user = db.users.find(u => u.id === currentCustomerId);
+            if (user) {
+                user.purchases++;
+                user.totalPurchase += amount;
+                user.points += points;
+                user.lastPurchase = Date.now();
+                db.totalPoints += points;
+                save();
+                alert(`✅ خرید ثبت شد - ${points} امتیاز`);
+                document.getElementById('purchaseAmount').value = '';
+                openCustomerPanel(currentCustomerId);
+            }
+        }
+
+        function renderVipList() {
+            const vips = db.users.filter(u => u.points >= 100);
+            const list = document.getElementById('vipList');
+            if (vips.length === 0) {
+                list.innerHTML = '<div class="card text-center">هیچ VIP وجود ندارد</div>';
+                return;
+            }
+
+            list.innerHTML = vips.map(u => `
+                <div class="card border-2 border-amber-200">
+                    <p class="font-black text-lg">${u.name}</p>
+                    <p class="text-sm">کد: ${u.code}</p>
+                    <p class="text-sm">⭐ امتیاز: ${u.points}</p>
+                </div>
+            `).join('');
+        }
+
+        function sendVipSms() {
+            const vips = db.users.filter(u => u.points >= 100);
+            if (vips.length === 0) return;
+            const msg = `VIP عزیز، از وفاداری شما متشکریم. یک تخفیف ویژه برای شما در نظر گرفته شده است.`;
+            const phones = vips.map(u => u.phone).join(';');
+            window.location.href = `sms:${phones}?body=${encodeURIComponent(msg)}`;
+        }
+
+        function renderLostList() {
+            const now = Date.now();
+            const lost = db.users.filter(u => u.lastPurchase && (now - u.lastPurchase) > 45 * 24 * 60 * 60 * 1000);
+            const list = document.getElementById('lostList');
+            if (lost.length === 0) {
+                list.innerHTML = '<div class="card text-center">هیچ مشتری گمشده‌ای نیست</div>';
+                return;
+            }
+
+            list.innerHTML = lost.map(u => {
+                const last = new Date(u.lastPurchase).toLocaleDateString('fa-IR');
+                return `
+                <div class="card border-2 border-red-200">
+                    <p class="font-black text-lg">${u.name}</p>
+                    <p class="text-sm">کد: ${u.code}</p>
+                    <p class="text-sm">آخرین خرید: ${last}</p>
+                </div>`;
+            }).join('');
+        }
+
+        function sendLostSms() {
+            const now = Date.now();
+            const lost = db.users.filter(u => u.lastPurchase && (now - u.lastPurchase) > 45 * 24 * 60 * 60 * 1000);
+            if (lost.length === 0) return;
+            const msg = `عزیز دلمون برات تنگ شده! یک تخفیف ویژه ۴۰٪ برای خرید بعدی‌ت در نظر گرفتیم. منتظرتیم 🫶`;
+            const phones = lost.map(u => u.phone).join(';');
+            window.location.href = `sms:${phones}?body=${encodeURIComponent(msg)}`;
+        }
+
+        function runLottery() {
+            if (db.vipExp < Date.now()) {
+                alert('❌ این بخش نیاز به اشتراک VIP دارد');
+                return;
+            }
+
+            const prizes = document.getElementById('prizes').value.split('\n').filter(p => p.trim());
+            if (prizes.length === 0) return alert('❌ جوایز را وارد کنید');
+            if (db.users.length < prizes.length) return alert('❌ تعداد مشتری کمتر از جوایز است');
+
+            let candidates = [];
+            db.users.forEach(u => {
+                const chance = Math.max(1, u.points || 1);
+                for (let i = 0; i < chance; i++) candidates.push(u);
+            });
+
+            let winners = [];
+            let selectedIds = new Set();
+
+            for (let i = 0; i < prizes.length; i++) {
+                const available = candidates.filter(c => !selectedIds.has(c.id));
+                if (available.length === 0) break;
+                
+                const randomIndex = Math.floor(Math.random() * available.length);
+                const winner = available[randomIndex];
+                winners.push(winner);
+                selectedIds.add(winner.id);
+            }
+
+            let resultHtml = '<p class="font-black text-lg mb-3">🏆 برندگان:</p>';
+            winners.forEach((winner, index) => {
+                const prizeCode = 'PRIZE-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000;
+                
+                db.winners.push({
+                    code: prizeCode,
+                    prize: prizes[index],
+                    winnerName: winner.name,
+                    winnerPhone: winner.phone,
+                    status: 'active',
+                    expiry: expiry,
+                    date: Date.now()
+                });
+
+                resultHtml += `
+                    <div class="card border-2 border-green-500">
+                        <p class="font-black text-lg">${winner.name}</p>
+                        <p class="text-md">🏆 ${prizes[index]}</p>
+                        <p class="text-sm font-mono mt-2">کد: ${prizeCode}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('lotteryResult').innerHTML = resultHtml;
+            save();
+            document.getElementById('prizes').value = '';
+        }
+
+        function checkCode() {
+            const code = document.getElementById('checkCode').value.trim().toUpperCase();
+            const result = document.getElementById('checkResult');
+
+            const winner = db.winners.find(w => w.code === code);
+            if (winner) {
+                if (winner.status === 'used') {
+                    result.innerHTML = '<div class="p-4 bg-slate-200 rounded-2xl text-center">❌ این کد قبلاً استفاده شده</div>';
+                } else {
+                    const expiry = new Date(winner.expiry).toLocaleDateString('fa-IR');
+                    result.innerHTML = `
+                        <div class="card border-2 border-green-500">
+                            <p class="font-black text-green-600 text-lg">✅ کد جایزه معتبر</p>
+                            <p class="text-md mt-2">برنده: ${winner.winnerName}</p>
+                            <p class="text-md">جایزه: ${winner.prize}</p>
+                            <p class="text-sm">اعتبار تا: ${expiry}</p>
+                            <button onclick="deliverPrize('${winner.code}')" class="btn btn-danger mt-3">تحویل شد</button>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const discount = db.discounts.find(d => d.code === code);
+            if (discount) {
+                if (discount.used) {
+                    result.innerHTML = '<div class="p-4 bg-slate-200 rounded-2xl text-center">❌ این کد قبلاً استفاده شده</div>';
+                } else if (discount.expiry < Date.now()) {
+                    result.innerHTML = '<div class="p-4 bg-red-100 rounded-2xl text-center">❌ این کد منقضی شده</div>';
+                } else {
+                    const expiry = new Date(discount.expiry).toLocaleDateString('fa-IR');
+                    result.innerHTML = `
+                        <div class="card border-2 border-green-500">
+                            <p class="font-black text-green-600 text-lg">✅ کد تخفیف معتبر</p>
+                            <p class="text-md mt-2">عنوان: ${discount.title}</p>
+                            <p class="text-md">درصد: ${discount.percent}%</p>
+                            <p class="text-sm">اعتبار تا: ${expiry}</p>
+                            <button onclick="useDiscount('${discount.code}')" class="btn btn-danger mt-3">استفاده شد</button>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            result.innerHTML = '<div class="p-4 bg-red-100 rounded-2xl text-center">❌ کد نامعتبر است</div>';
+        }
+
+        function deliverPrize(code) {
+            const winner = db.winners.find(w => w.code === code);
+            if (winner) {
+                winner.status = 'used';
+                save();
+                alert('✅ جایزه تحویل داده شد');
+                document.getElementById('checkResult').innerHTML = '';
+                document.getElementById('checkCode').value = '';
+            }
+        }
+
+        function useDiscount(code) {
+            const discount = db.discounts.find(d => d.code === code);
+            if (discount) {
+                discount.used = true;
+                save();
+                alert('✅ کد تخفیف استفاده شد');
+                document.getElementById('checkResult').innerHTML = '';
+                document.getElementById('checkCode').value = '';
+            }
+        }
+
+        function renderDiscounts() {
+            const list = document.getElementById('discountList');
+            if (db.discounts.length === 0) {
+                list.innerHTML = '<div class="card text-center">کدی ساخته نشده</div>';
+                return;
+            }
+
+            list.innerHTML = db.discounts.map(d => {
+                const expiry = new Date(d.expiry).toLocaleDateString('fa-IR');
+                const status = d.used ? 'استفاده شده' : (d.expiry < Date.now() ? 'منقضی' : 'فعال');
+                const statusColor = d.used ? 'red' : (d.expiry < Date.now() ? 'orange' : 'green');
+                return `
+                <div class="card flex justify-between items-center">
+                    <div>
+                        <p class="font-black text-lg">${d.title}</p>
+                        <p class="text-sm">کد: ${d.code} | ${d.percent}%</p>
+                        <p class="text-xs text-slate-400">اعتبار تا: ${expiry}</p>
+                    </div>
+                    <span class="text-${statusColor}-500 text-sm font-black">${status}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function createDiscount() {
+            if (db.vipExp < Date.now()) {
+                alert('❌ این بخش نیاز به اشتراک VIP دارد');
+                return;
+            }
+
+            const title = document.getElementById('discountTitle').value;
+            const percent = document.getElementById('discountPercent').value;
+            const day = parseInt(document.getElementById('discountDay').value) || 30;
+            const month = parseInt(document.getElementById('discountMonth').value) || 0;
+
+            if (!title || !percent) return alert('❌ عنوان و درصد را وارد کنید');
+
+            const code = 'OFF-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const expiry = Date.now() + (day + month * 30) * 24 * 60 * 60 * 1000;
+
+            db.discounts.push({
+                title: title,
+                percent: percent,
+                code: code,
+                used: false,
+                expiry: expiry,
+                created: Date.now()
+            });
+
+            save();
+            alert('✅ کد تخفیف ساخته شد: ' + code);
+            document.getElementById('discountTitle').value = '';
+            document.getElementById('discountPercent').value = '';
+            renderDiscounts();
+        }
+
+        function initQR() {
+            const registerUrl = window.location.href.split('?')[0] + '?register=' + db.deviceId;
+            
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), {
+                text: registerUrl,
+                width: 200,
+                height: 200
+            });
+        }
+
+        function qrRegister() {
+            const name = document.getElementById('qrName').value;
+            const phone = document.getElementById('qrPhone').value;
+            if (!name || !phone) return alert('❌ نام و شماره را وارد کنید');
+
+            if (db.vipExp < Date.now() && db.users.length >= 20) {
+                alert('❌ در نسخه رایگان فقط ۲۰ مشتری می‌توانید ثبت کنید');
+                return;
+            }
+
+            const code = (db.lastCode++).toString();
+            const newUser = {
+                id: Date.now(),
+                code: code,
+                name: name,
+                phone: phone,
+                d: document.getElementById('qrDay').value,
+                m: document.getElementById('qrMonth').value,
+                y: document.getElementById('qrYear').value,
+                points: 10,
+                purchases: 0,
+                totalPurchase: 0,
+                lastPurchase: null,
+                discountCodes: []
+            };
+
+            db.users.push(newUser);
+
+            const discountCode = 'WELCOME-' + code;
+            const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000;
+            db.discounts.push({
+                title: 'خوش‌آمدگویی QR',
+                percent: 20,
+                code: discountCode,
+                used: false,
+                expiry: expiry,
+                forUser: code
+            });
+
+            save();
+
+            const link = window.location.href.split('?')[0] + '?customer=' + code;
+            const expiryDate = new Date(expiry).toLocaleDateString('fa-IR');
+            const msg = `${name} عزیز به ${db.shopName} خوش آمدید!\nامتیاز: 10\nکد تخفیف ۲۰٪: ${discountCode}\nاعتبار تا: ${expiryDate}\nلینک پنل: ${link}`;
+            window.location.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
+
+            alert('✅ عضویت با موفقیت انجام شد');
+            document.getElementById('qrName').value = '';
+            document.getElementById('qrPhone').value = '';
+            updateUI();
+            showPage('home');
+        }
+
+        function autoBirthdaySms() {
+            const today = new Date();
+            const month = (today.getMonth() + 1).toString();
+            const day = today.getDate().toString();
+            
+            const bdays = db.users.filter(u => u.d === day && u.m === month);
+            
+            bdays.forEach(u => {
+                const discountCode = 'BDAY-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                const msg = `${u.name} جان! تولدت مبارک 🎉 یک کد تخفیف ۲۰٪ مخصوص تو: ${discountCode}`;
+                window.location.href = `sms:${u.phone}?body=${encodeURIComponent(msg)}`;
+            });
+            
+            if (bdays.length > 0) {
+                alert(`✅ پیامک تولد برای ${bdays.length} نفر ارسال شد`);
+            }
+        }
+
+        function autoLotterySms() {
+            const winners = db.winners.filter(w => w.status === 'active').slice(0, 5);
+            
+            winners.forEach(w => {
+                const msg = `${w.winnerName} جان! شما برنده ${w.prize} شدید 🎁 کد جایزه: ${w.code}`;
+                window.location.href = `sms:${w.winnerPhone}?body=${encodeURIComponent(msg)}`;
+            });
+            
+            if (winners.length > 0) {
+                alert(`✅ پیامک برای ${winners.length} برنده ارسال شد`);
+            }
+        }
+
+        function checkCustomerLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerCode = urlParams.get('customer');
+            if (!customerCode) return;
+
+            const user = db.users.find(u => u.code === customerCode);
+            if (!user) return;
+
+            const userDiscounts = db.discounts.filter(d => user.discountCodes.includes(d.code) || d.forUser === user.code);
+            const userWinners = db.winners.filter(w => w.winnerPhone === user.phone);
+
+            let content = `
+                <div class="card mb-4">
+                    <p class="font-black text-xl">${user.name}</p>
+                    <p class="text-sm">کد: ${user.code}</p>
+                    <p class="text-lg font-black mt-3">⭐ امتیاز شما: ${user.points}</p>
+                    <p class="text-sm">🛒 تعداد خرید: ${user.purchases}</p>
+                </div>
+
+                <div class="card bg-green-50">
+                    <p class="font-black text-lg mb-2">🏷️ کدهای تخفیف شما</p>
+                    ${userDiscounts.length === 0 ? '<p class="text-sm">کد تخفیفی ندارید</p>' : ''}
+                    ${userDiscounts.map(d => {
+                        const expiry = new Date(d.expiry).toLocaleDateString('fa-IR');
+                        return `<div class="text-sm mb-2">✅ ${d.title} - ${d.percent}% (اعتبار تا ${expiry})</div>`;
+                    }).join('')}
+                </div>
+
+                <div class="card bg-amber-50 mt-3">
+                    <p class="font-black text-lg mb-2">🏆 جوایز شما</p>
+                    ${userWinners.length === 0 ? '<p class="text-sm">هنوز جایزه‌ای نبرده‌اید</p>' : ''}
+                    ${userWinners.map(w => {
+                        return `<div class="text-sm mb-2">🎁 ${w.prize} - کد: ${w.code}</div>`;
+                    }).join('')}
+                </div>
+            `;
+
+            document.getElementById('customerModalContent').innerHTML = content;
+            document.getElementById('customerModal').style.display = 'flex';
+        }
+
+        function closeCustomerModal() {
+            document.getElementById('customerModal').style.display = 'none';
+        }
+
+        function openBackupModal() {
+            document.getElementById('backupModal').style.display = 'flex';
+        }
+
+        function closeBackupModal() {
+            document.getElementById('backupModal').style.display = 'none';
+        }
+
+        function backupData() {
+            const data = JSON.stringify(db, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `crm-backup-${new Date().toLocaleDateString('fa-IR').replace(/\//g, '-')}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ پشتیبان با موفقیت ساخته شد');
+        }
+
+        function restoreData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const restored = JSON.parse(e.target.result);
+                    if (restored && typeof restored === 'object') {
+                        db = restored;
+                        save();
+                        alert('✅ اطلاعات با موفقیت بازیابی شد');
+                        location.reload();
+                    }
+                } catch (error) {
+                    alert('❌ فایل نامعتبر است');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function adminTrigger() {
+            adminClickCount++;
+            if (adminClickCount === 5) {
+                adminClickCount = 0;
+                const pwd = prompt('🔐 رمز مدیریت:');
+                if (pwd === ADMIN_SECRET) {
+                    showPage('admin');
+                } else {
+                    alert('❌ رمز اشتباه است');
+                }
+            }
+        }
+
+        function adminCreateLicense() {
+            const devId = document.getElementById('adminDeviceId').value.trim().toUpperCase();
+            const days = document.getElementById('adminDuration').value;
+            if (!devId) return alert('❌ شناسه دستگاه را وارد کنید');
+
+            const code = 'VIP-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+            document.getElementById('adminLicenseResult').innerText = code;
+            document.getElementById('adminLicenseResult').classList.remove('hidden');
+            navigator.clipboard.writeText(code);
+            alert('✅ کد لایسنس ساخته شد و کپی شد');
+        }
+
+        function adminCreateDiscount() {
+            const title = document.getElementById('adminDiscountTitle').value;
+            const percent = document.getElementById('adminDiscountPercent').value;
+            const day = parseInt(document.getElementById('adminDiscountDay').value) || 30;
+            const month = parseInt(document.getElementById('adminDiscountMonth').value) || 0;
+
+            if (!title || !percent) return alert('❌ عنوان و درصد را وارد کنید');
+
+            const code = 'ADMIN-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const expiry = Date.now() + (day + month * 30) * 24 * 60 * 60 * 1000;
+
+            db.discounts.push({
+                title: title,
+                percent: percent,
+                code: code,
+                used: false,
+                expiry: expiry,
+                created: Date.now(),
+                isAdmin: true
+            });
+
+            save();
+            alert('✅ کد تخفیف ساخته شد: ' + code);
+        }
+
+        function activateLicense() {
+            const key = document.getElementById('licenseKey').value.trim().toUpperCase();
+            if (db.usedLicenses.includes(key)) return alert('❌ این کد قبلاً استفاده شده');
+
+            db.vipExp = Date.now() + 90 * 24 * 60 * 60 * 1000;
+            db.usedLicenses.push(key);
+            save();
+            alert('✅ اشتراک با موفقیت فعال شد');
+            updateUI();
+            showPage('home');
+        }
+
+        function copyDeviceId() {
+            navigator.clipboard.writeText(db.deviceId);
+            alert('✅ کپی شد');
+        }
+
+        function vipGuard(page) {
+            if (db.vipExp > Date.now()) {
+                showPage(page);
+            } else {
+                if (confirm('این بخش نیاز به اشتراک VIP دارد. به صفحه خرید بروید؟')) {
+                    showPage('vip');
+                }
+            }
+        }
+
+        function checkBirthdays() {
+            const now = new Date();
+            const month = (now.getMonth() + 1).toString();
+            const day = now.getDate().toString();
+            
+            const bdays = db.users.filter(u => u.d === day && u.m === month);
+            if (bdays.length > 0) {
+                document.getElementById('birthdayBanner').classList.remove('hidden');
+                document.getElementById('birthdayText').innerText = `🎂 ${bdays.length} مشتری امروز تولد دارن!`;
+            }
+        }
+
+        function sendBirthdaySms() {
+            autoBirthdaySms();
+        }
+
+        function changeColor(color) {
+            db.headerColor = color;
+            document.getElementById('header').style.background = color;
+            save();
+        }
+
+        function changeFont(font) {
+            db.font = font;
+            document.body.style.fontFamily = font + ', sans-serif';
+            save();
+        }
+
+        function saveSettings() {
+            db.shopName = document.getElementById('setShopName').value || db.shopName;
+            db.userName = document.getElementById('setUserName').value || db.userName;
+            db.pin = document.getElementById('setPin').value;
+            
+            save();
+            updateUI();
+            alert('✅ تنظیمات ذخیره شد');
+        }
+
+        function updateUI() {
+            document.getElementById('shopName').innerText = db.shopName;
+            document.getElementById('userName').innerText = db.userName;
+            document.getElementById('customerCount').innerText = `لیست (${db.users.length})`;
+            document.getElementById('totalCustomers').innerText = db.users.length;
+            
+            const vipCount = db.users.filter(u => u.points >= 100).length;
+            const lostCount = db.users.filter(u => u.lastPurchase && (Date.now() - u.lastPurchase) > 45 * 24 * 60 * 60 * 1000).length;
+            
+            document.getElementById('totalVip').innerText = vipCount;
+            document.getElementById('totalLost').innerText = lostCount;
+            
+            if (db.vipExp > Date.now()) {
+                document.getElementById('vipStatus').innerHTML = '✅ VIP فعال';
+            } else {
+                document.getElementById('vipStatus').innerHTML = '💎 خرید اشتراک';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
